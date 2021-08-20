@@ -1,0 +1,13 @@
+<div *appLoader="data$ | async as data" class="seaz-modal__history">
+  <h1 class="seaz-h3 seaz-modal__history_title">{{'jobOffer.history' | transloco}}</h1>
+  <div class="seaz-modal__history_card_list">
+    <app-job-offers-history-item *ngFor="let item of data?.list; trackBy: trackById" [item]="item">
+    </app-job-offers-history-item>
+  </div>
+  <ng-container *ngIf="data?.pagination as pagination">
+    <ng-container *ngIf="pagination?.pageCount > 1">
+      <app-paginator [totalSize]="pagination?.pageCount" [currentPage]="pagination?.currentPage"
+        (changePage)="onChangePage($event)"></app-paginator>
+    </ng-container>
+  </ng-container>
+</div>

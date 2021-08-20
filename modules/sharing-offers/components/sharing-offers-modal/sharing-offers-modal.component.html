@@ -1,0 +1,33 @@
+<div class="seaz-modal__share_offer">
+  <h1 class="seaz-modal__share_offer_title seaz-h2">{{data?.title}}</h1>
+  <p class="seaz-modal__share_offer_subtitle seaz-text-medium">{{data?.text}}</p>
+  <div class="seaz-modal__share_offer_selected_box">
+    <p class="seaz-modal__share_offer_selected seaz-h3">{{"general.selected" | transloco}} {{selectedActions?.length}}/{{sharingOffersList?.crewAll?.length}}</p>
+    <div  *ngIf="data?.type === sharingCandidatesSourceType.Favorite" class="seaz-modal__share_offer_all">
+      <span class="seaz-modal__share_offer_all_text seaz-h5">{{"formFields.chooseAll" | transloco}}</span>
+    <app-seazone-checkbox
+      [formControl]="selectedAllControl"
+      (changed)="changeSelectAll($event)"
+      class="seaz-modal__share_offer_checkbox"
+    >
+    </app-seazone-checkbox>
+    </div>
+  </div>
+    <app-sharing-offers-list
+      [data]="sharingOffersList"
+      [type]="data?.type"
+      (changeSelected)="changeSelectStatusAction($event)"
+    >
+    </app-sharing-offers-list>
+  <app-paginator [currentPage]="sharingOffersList?.pagination?.currentPage" [totalSize]="sharingOffersList?.pagination?.pageCount"
+                 (changePage)="onChangePage($event)">
+  </app-paginator>
+  <div class="seaz-modal__share_offer-btn">
+  <div class="seaz-crew__btn_box">
+    <button (click)="cancel()" class="seaz__btn_outlined yaht-edit__btn">{{'actions.cancel' | transloco}}
+    </button>
+    <button (click)="shareActions()" [disabled]="!selectedActions?.length" class="seaz__btn_primary">{{'jobOffer.share' | transloco}}
+    </button>
+  </div>
+  </div>
+</div>

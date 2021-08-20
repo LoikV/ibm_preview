@@ -1,0 +1,20 @@
+<ng-container>
+  <ng-container *ngIf="jobOffers?.length else empty">
+    <ng-container *ngFor="let item of jobOffers">
+      <app-job-offers-item-preview
+        [item]="item"
+        (edit)="onEdit($event)"
+        (inviteCrew)="onInviteCrew($event)"
+        (goToSearch)="onGoToSearch($event)"
+        (goToOffer)="goToOffer($event)"
+        (jumpToTop)="onJumpToTop($event)"
+        (changePublishStatus)="onChangePublishStatus($event)">
+      </app-job-offers-item-preview>
+    </ng-container>
+  </ng-container>
+  <ng-template #empty>
+    <app-no-data
+      [title]="'jobOffer.noData' | transloco">
+    </app-no-data>
+  </ng-template>
+</ng-container>

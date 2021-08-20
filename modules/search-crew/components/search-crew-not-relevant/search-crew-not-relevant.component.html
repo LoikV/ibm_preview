@@ -1,0 +1,19 @@
+<div class="seaz-search__relevant">
+  <div class="seaz-search__relevant_clear">
+    <span *ngIf="searchCrewSettings$ | async as settings" class="seaz-search__relevant_clear_text seaz-h5">
+      {{'search.removeNotice' | transloco: {value: settings?.numberNotRelevantDays} }}
+    </span>
+    <button (click)="onRemoveNotRelevantList()" class="seaz__btn_outlined-red">{{'search.actions.clearAll' |
+      transloco}}</button>
+  </div>
+  <div class="seaz-search__relevant_content">
+    <div>
+      <app-crew-search-list *appLoader="list$ | async as list" [data]="list" [isRelevantUserList]="false"
+        [sentOfferId]="sentOfferId$ | async" [type]="crewSearchType" (changePage)="onChangePage($event)"
+        (toggleRelevantStatus)="onRemoveNotRelevant($event)" (toggleFavoriteStatus)="onAddToFavorite($event)"
+        (toProfile)="onGoToProfile($event)" (sendJobOffer)="onSendJobOffer($event)"
+        (showHistory)="onShowHistory($event)">
+      </app-crew-search-list>
+    </div>
+  </div>
+</div>

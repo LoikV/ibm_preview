@@ -1,0 +1,18 @@
+<div class="seaz-search__wrapper">
+  <div class="seaz-search">
+    <ng-container *ngIf="(navItems$ | async) as navItems">
+      <app-large-navigation-links [items]="navItems">
+        <ng-container *ngIf="(newActions$ | async) as actions">
+          <div *ngIf="actions.published || actions.unpublished" class="seaz-search__icon">
+            <app-seazone-icon name="warningCircle" color="aqua"></app-seazone-icon>
+          </div>
+        </ng-container>
+      </app-large-navigation-links>
+    </ng-container>
+    <!-- <app-boat-search-info [info]="boatShortInfo$ | async"></app-boat-search-info> -->
+    <ng-container *appLoader="boatShortInfo$ | async as info">
+      <app-boat-financial-header [info]="info" viewType="short" class="seaz-search__boat"></app-boat-financial-header>
+    </ng-container>
+    <router-outlet></router-outlet>
+  </div>
+</div>

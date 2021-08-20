@@ -1,0 +1,71 @@
+<div *transloco="let t; read: 'jobOffer'" class="seaz-modal__history_card">
+  <div class="seaz-modal__history_card_img">
+    <app-seazone-icon [class.incoming]="isIncomingOffer" name="arrow-top-bordered"
+      [color]="isIncomingOffer ? 'oceanic' : 'green'"></app-seazone-icon>
+  </div>
+  <div class="seaz-modal__history_card_content">
+    <div *ngIf="item?.position as position" class="seaz-modal__history_position">
+      <span class="seaz-modal__history_position_text">{{position?.name}}</span>
+      <img [src]="position?.icon" class="seaz-modal__history_position_icon">
+    </div>
+    <div>
+      <span class="seaz-modal__history_name seaz-text-medium">{{item?.offerName}}</span>
+    </div>
+    <div class="seaz-modal__history_info">
+      <div class="seaz-modal__history_info_col seaz-modal__history_info_item">
+        <span class="seaz-modal__history_info_label">{{t('contract')}}</span>
+        <span class="seaz-modal__history_info_title">
+          {{item?.jobOfferKindContract | arrayJoin}}
+        </span>
+      </div>
+      <div class="seaz-modal__history_info_row">
+        <div class="seaz-modal__history_info_col seaz-modal__history_info_item">
+          <span class="seaz-modal__history_info_label">{{'general.startDate' | transloco}}</span>
+          <ng-container *ngIf="item?.flexible; else date">
+            <span class="seaz-modal__history_info_title">{{t('flexible')}}</span>
+          </ng-container>
+          <ng-template #date>
+            <span class="seaz-modal__history_info_title">{{item?.estimatedStartDate}}</span>
+          </ng-template>
+        </div>
+        <app-seazone-icon name="longArrow"
+                          stokedColor="violet" class="seaz-modal__history_info_arrow"></app-seazone-icon>
+        <div class="seaz-modal__history_info_col seaz-modal__history_info_item">
+          <span class="seaz-modal__history_info_label">{{'general.endDate' | transloco}}</span>
+          <span class="seaz-modal__history_info_title">
+            <ng-container *ngIf="item?.endDate; else noDate">
+              {{item?.endDate}}
+            </ng-container>
+            <ng-template #noDate>
+              {{t('flexible')}}
+            </ng-template>
+          </span>
+        </div>
+      </div>
+      <div class="seaz-modal__history_info_col seaz-modal__history_info_item">
+        <span class="seaz-modal__history_info_label">{{t('periodSalary', {value: item?.salaryPeriod})}}</span>
+        <span class="seaz-modal__history_info_title">
+          <span [innerHTML]="item?.offeredSalaryCurrency"></span>
+          {{item?.offeredSalary}}
+        </span>
+      </div>
+    </div>
+    <div class="job-offer__card_id">
+      <span class="job-offer__card_id_title">{{t("jobOfferId")}}</span>
+      <div [appCopying]="item?.jobOfferId" [succsessTitle]="t('actions.copyId')" class="job-offer__card_id_number_box">
+        <span class="job-offer__card_id_number">{{item?.jobOfferId}}</span>
+        <app-seazone-icon name="copy" color="green" strokedColor="green" class="job-offer__card_id_number_icon">
+        </app-seazone-icon>
+      </div>
+    </div>
+    <div class="seaz-modal__history_info_date">
+      <ng-container *ngIf="isIncomingOffer; else sentOffer">
+        {{'offeredStatus.applied' | transloco}}
+      </ng-container>
+      <ng-template #sentOffer>
+        {{'offeredStatus.sent' | transloco}}
+      </ng-template>
+      {{item?.dateSendOrApply}}
+    </div>
+  </div>
+</div>

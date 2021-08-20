@@ -1,0 +1,65 @@
+<ng-container *appLoader="offer$ | async as offer">
+  <div class="seaz-offer__header seaz-offer__detail_header" *transloco="let t; read: 'jobOffer'">
+    <div class="seaz-offer__detail_header_top">
+      <button class="seaz__return_btn" (click)="goToOffersList(offer?.published)">
+        <app-seazone-icon name="shevron" strokedColor="dark"></app-seazone-icon>
+      </button>
+      <div class="seaz-offer__detail_header_wrap">
+        <h1 class="seaz-crew__contract_head_title seaz-h2">
+          {{offer?.position?.name}}
+          <img *ngIf="offer?.position?.icon" [src]="offer?.position?.icon" class="seaz-crew__contract_head_icon">
+        </h1>
+        <span class="seaz-offer__detailF_header_dates">
+          {{'general.createDate' | transloco}}: {{offer?.dateCreate | date: "dd/MM/yyyy"}} – {{'general.lastUpdate' |
+          transloco}}: {{offer?.dateUpdate | date: "dd/MM/yyyy"}}
+        </span>
+        <div *ngIf="offer?.view?.reasonOfUnpublishing as reason" class="seaz-offer__detail_header_status">
+          <div class="seaz-offer__detail_header_status_row">
+            <div class="seaz-offer__detail_header_status_badge">{{'jobOffer.unpublished' | transloco}}</div>
+            <span class="seaz-offer__detail_header_status_date">{{offer?.dateUpdate | date: "dd/MM/yyyy"}}</span>
+          </div>
+          <div class="seaz-offer__detail_header_status_text"
+               [class.success]="reason?.id === UnpublishReason.ClosedByMyCompany">
+            {{reason?.description}}
+            <ng-container *ngIf="reason?.id === UnpublishReason.ClosedByMyCompany">
+              🙂
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="seaz-offer__detail_header_toggle_box">
+        <div *appPermission="'perm_search_job_offer_edit'" class="seaz-offer__detail_header_toggle_row">
+          <div class="seaz-offer__detail_header_toggle_text">{{t('tPublish')}}</div>
+          <app-toggle-checkbox [withConfirm]="true" [value]="offer?.published"
+                               (changed)="changedOfferStatus(offer?.id, offer?.hired, $event, offer?.createdByCrewAgency)"
+                               class="seaz-toggle seaz-offer__detail_header_toggle"></app-toggle-checkbox>
+        </div>
+        <button appShare [params]="{jobOfferId: offer.id}" [config]="shareConfig" class="job-offer__card_share">
+          <app-seazone-icon class="job-offer__card_share_icon" name="arrowBackFill" color="white"></app-seazone-icon>
+        </button>
+      </div>
+
+    </div>
+    <div class="seaz-offer__detail_header_btns">
+      <ng-container *appDisallowUserCrewAgency="true">
+        <ng-container *ngIf="!offer?.createdByCrewAgency">
+          <button *appPermission="'perm_fin_add_new_users'" (click)="onInviteCrew(offer?.id)"
+                  class="seaz__btn_primary">{{t('controls.inviteCrew')}}</button>
+        </ng-container>
+      </ng-container>
+      <button *appPermission="'perm_search_crew_search'" (click)="onGoToSearch(offer?.form)"
+              class="seaz__btn_mulberry">{{t('controls.goToSearch')}}</button>
+      <button *appPermission="'perm_search_job_offer_edit'" (click)="onJumpToTop(offer?.id)" class="seaz__btn_jump">
+        <span class="seaz__btn_jump_icon"></span>
+        {{t('controls.jumpToTop')}}
+      </button>
+    </div>
+  </div>
+  <app-job-offer-details-card [canEdit]="true" [offer]="offer?.view" (editOffer)="onEditOffer(offer)">
+    <app-boat-short-info-card [boat]="offer?.boat" [showDistanceToUser]="false">
+    </app-boat-short-info-card>
+  </app-job-offer-details-card>
+  <div #offeredUser>
+    <app-offered-users (goToSearch)="onGoToSearch(offer?.form)"></app-offered-users>
+  </div>
+</ng-container>

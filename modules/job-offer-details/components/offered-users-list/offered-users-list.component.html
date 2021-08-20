@@ -1,0 +1,74 @@
+<ng-container *ngIf="data?.list?.length; else noData">
+  <ng-container *ngFor="let item of data?.list; trackBy: trackBy">
+    <ng-container *transloco="let t; read: 'jobOffer.controls'">
+      <app-crew-job-offer-card
+        (watchContacts)="onWatchContacts(item?.contacts, item?.jobOfferInvitationId, item.status)"
+        (setRating)="onSetRating($event, item?.jobOfferInvitationId)"
+        (showInfoRating)="onShowRatingModal()" [item]="item">
+
+        <ng-container mainControl>
+          <button class="seaz__btn_primary"
+                  (click)="onGoToProfile(item?.user?.id, item?.jobOfferInvitationId)">
+            {{t('goProfile')}}
+          </button>
+          <ng-container *appDisallowUserCrewAgency="true">
+            <ng-container *ngIf="!item?.createdByCrewAgency">
+              <ng-container *ngIf="item?.invStatus === JobOfferInvitationStatusType.INV_STATUS_VIEWED ||
+                        item?.invStatus === JobOfferInvitationStatusType.INV_STATUS_APPLIED ||
+                        item?.invStatus === JobOfferInvitationStatusType.INV_STATUS_OPENED_CONTACTS ||
+                        item?.invStatus === JobOfferInvitationStatusType.INV_STATUS_VIEWED_CONTACTS">
+                <button class="seaz__btn_mulberry" (click)="onAddCrew(item?.jobOfferInvitationId)">
+                  {{t('addAsCrew')}}
+                </button>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+          <button *ngIf="item?.invStatus === JobOfferInvitationStatusType.INV_STATUS_SENT_OFFER"
+                  class="seaz__btn_mulberry"
+                  (click)="onSendAgain(item?.jobOfferInvitationId, item?.canSendOfferAgain)">
+            {{t('sendAgain')}}
+          </button>
+          <ng-container *appPermission="['perm_search_send_offer', 'perm_search_add_crew']">
+            <ng-container *ngIf="item?.invStatus === JobOfferInvitationStatusType.INV_STATUS_APPLIED ||
+                    item?.invStatus === JobOfferInvitationStatusType.INV_STATUS_VIEWED ||
+                    item?.invStatus === JobOfferInvitationStatusType.INV_STATUS_SENT_OFFER ||
+                    item?.invStatus === JobOfferInvitationStatusType.INV_STATUS_OPENED_CONTACTS ||
+                    item?.invStatus === JobOfferInvitationStatusType.INV_STATUS_VIEWED_CONTACTS">
+              <button class="seaz__btn_outlined-red" (click)="onDecline(item?.jobOfferInvitationId)">
+                {{'actions.decline' | transloco}}
+              </button>
+            </ng-container>
+            <button *ngIf="item?.canRevise" class="seaz__btn_outlined--blue capital"
+                    (click)="onRevise(item?.jobOfferInvitationId)">
+              {{'actions.revise' | transloco}}
+            </button>
+          </ng-container>
+          <ng-container *appDisallowUserCrewAgency="true">
+            <ng-container *ngIf="!item?.createdByCrewAgency">
+              <ng-container *ngIf="item?.invStatus === JobOfferInvitationStatusType.INV_STATUS_SENT_ADD_AS_CREW">
+                <button (click)="onResendInvitation(item.user?.email)" class="card__btn seaz__btn_primary"
+                        type="button">
+                  {{'crew.actions.sendInvitation' | transloco}}
+                </button>
+                <button (click)="onShowContract(item.contractInvitation.boatContractInvitationId)"
+                        class="card__btn  seaz__btn_mulberry" type="button">
+                  {{'crew.actions.seeContract' | transloco}}
+                </button>
+                <button (click)="onCancelInvitation(item.user?.email)" class="card__btn seaz__btn_outlined-red"
+                        type="button">
+                  {{'crew.actions.cancelInvitation' | transloco}}
+                </button>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </app-crew-job-offer-card>
+    </ng-container>
+  </ng-container>
+  <app-paginator [currentPage]="data?.pagination?.currentPage" [totalSize]="data?.pagination?.pageCount"
+                 (changePage)="onChangePage($event)">
+  </app-paginator>
+</ng-container>
+<ng-template #noData>
+  <app-no-data [title]="'jobOffer.noCrewData' | transloco" [image]="stubImages.USER"></app-no-data>
+</ng-template>

@@ -1,0 +1,40 @@
+<div class="seaz-offer__users">
+  <div class="seaz-search__relevant_clear">
+    <span class="seaz-search__relevant_clear_text seaz-h5">
+      {{'search.removeNotice' | transloco: {value: 60} }}
+    </span>
+    <!-- <button (click)="onRemoveAppliedList()" class="seaz__btn_outlined-red">{{'search.actions.clearAll' |
+      transloco}}</button> -->
+  </div>
+  <div class="seaz-job__search_applied_nav">
+    <ng-container *ngFor="let item of navItems$ | async; trackBy: trackByTitle">
+      <a [class.active]="choosenFilterControl?.value === item?.param" class="seaz-job__search_applied_nav_link"
+        (click)="onChooseType(item?.param)">
+        {{item.title | transloco}}
+        <ng-container *ngIf="item?.count !== null">
+          ({{item.count}})
+        </ng-container>
+        <ng-container *ngIf="item?.actionsCount">
+          <span class="seaz-job__search_applied_nav_action">
+            +{{item.actionsCount}}
+          </span>
+        </ng-container>
+      </a>
+    </ng-container>
+  </div>
+  <app-offered-users-list
+    *appLoader="offers$ | async as list"
+    [data]="list"
+    (changePage)="onChangePage($event)"
+    (sendAgain)="onSendAgain($event)"
+    (goToProfile)="onGoToProfile($event)"
+    (decline)="onDecline($event)"
+    (addAsCrew)="onAddCrew($event)"
+    (watchContacts)="onWatchContacts($event)"
+    (seeContract)="onSeeContract($event)"
+    (resendInvite)="onResendInvitation($event)"
+    (сancelInvitation)="onCancelInvitation($event)"
+    (revise)="onRevise($event)"
+    (setRating)="onSetRating($event)">
+  </app-offered-users-list>
+</div>

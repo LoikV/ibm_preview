@@ -1,0 +1,22 @@
+<div class="seaz-search__favorites seaz-job__search_favorites">
+  <div class="seaz-search__relevant_clear">
+    <button (click)="openSharingOffers()" class="sharing__offers-btn seaz__btn_aqua">{{'jobOffer.share' | transloco}}</button>
+    <div class="seaz-search__relevant_clear--right">
+      <span *ngIf="searchCrewSettings$ | async as settings" class="seaz-search__relevant_clear_text seaz-h5">
+        {{'search.removeNotice' | transloco: {value: settings?.numberFavoriteDays} }}
+      </span>
+      <button (click)="onRemoveFavorites()" class="seaz__btn_outlined-red">{{'search.actions.clearAll' |
+        transloco}}</button>
+    </div>
+  </div>
+  <div class="seaz-search__relevant_content">
+    <div>
+      <app-crew-search-list *appLoader="list$ | async as list" [data]="list" [type]="crewSearchType"
+        [sentOfferId]="sentOfferId$ | async" (changePage)="onChangePage($event)"
+        (toggleFavoriteStatus)="onRemoveFromFavorite($event)" (toggleRelevantStatus)="onAddNotRelevant($event)"
+        (toProfile)="onGoToProfile($event)" (sendJobOffer)="onSendJobOffer($event)"
+        (showHistory)="onShowHistory($event)">
+      </app-crew-search-list>
+    </div>
+  </div>
+</div>

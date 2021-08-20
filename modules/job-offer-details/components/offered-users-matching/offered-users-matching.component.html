@@ -1,0 +1,15 @@
+<ng-container *ngIf="[] as users">
+    <ng-container *ngIf="false else noData">
+    <ng-container *ngFor="let item of []">
+        <app-crew-job-offer-card [item]="item" [offered]="true">
+            <div class="buttons">
+                <button>go to crew Profile</button>
+                <button>Add as a crew</button>
+                <button>Not relevant</button>
+            </div>
+        </app-crew-job-offer-card>
+    </ng-container>
+</ng-container>
+<ng-template #noData>
+    <app-no-data [title]="'the list is empty'" [image]="stubImages.USER"></app-no-data>
+</ng-template>

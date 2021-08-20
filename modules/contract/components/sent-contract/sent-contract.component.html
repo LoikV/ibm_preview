@@ -1,0 +1,21 @@
+<div class="container">
+    <ng-container *appLoader="contractDetails$ | async as contractDetails">
+        <div class="seaz-crew__contract_wrapper">
+            <div class="seaz-crew__contract_head">
+                <button class="seaz__return_btn" (click)="onBack()">
+                    <app-seazone-icon name="shevron" strokedColor="dark"></app-seazone-icon>
+                </button>
+                <ng-container *ngIf="contractDetails  as contract">
+                    <h1 class="seaz-crew__contract_head_title seaz-h2">
+                        {{contract?.positionType}}
+                        <img [src]="contract?.positionIcon" class="seaz-crew__contract_head_icon">
+                    </h1>
+                </ng-container>
+            </div>
+            <div class="seaz-crew__contract_details">
+                <app-contract-details [editable]="false" [data]="contractDetails">
+                </app-contract-details>
+            </div>
+        </div>
+    </ng-container>
+</div>

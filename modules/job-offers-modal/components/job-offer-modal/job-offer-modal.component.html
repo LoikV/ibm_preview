@@ -1,0 +1,11 @@
+<div class="seaz-modal__offer seaz-modal__offer_create" *transloco="let t; read: 'jobOffer'">
+    <h2 *ngIf="data?.mode === 'add'" class="seaz-modal__head seaz-h3 seaz-modal__head_title">{{t('createJO')}}</h2>
+    <h2 *ngIf="data?.mode === 'edit'" class="seaz-modal__head seaz-h3 seaz-modal__head_title">{{t('editJO')}}</h2>
+    <app-job-offer-form
+        (save)="saveJobOffer($event)"
+        [data]="data?.item"
+        [errors]="errors"
+        (delete)="removeJobOffer()"
+        (cancel)="cancelJobOffer()"
+        [directories]="directories$ | async"></app-job-offer-form>
+</div>

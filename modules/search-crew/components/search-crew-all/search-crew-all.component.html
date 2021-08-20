@@ -1,0 +1,72 @@
+<div class="seaz-search__all">
+  <button class="seaz__btn_primary seaz-search__all_offer_btn" (click)="addJobOffer()">{{'jobOffer.controls.addJobOffer' | transloco}}</button>
+  <div class="seaz-search__main_content">
+    <div class="seaz-search__main_filter_col--mobile">
+      <div class="seaz-search__main_filter_btns">
+        <button (click)="onOpenSearchFilterModal()" class="seaz-filters__open seaz__btn_outlined">
+          {{'search.filters.title' | transloco}}
+          <ng-container *ngIf="filtersCount$ | async as count">
+            {{count}}
+          </ng-container>
+        </button>
+        <button (click)="onOpenMap()" class="seaz-filters__map_icon">
+          {{'search.filters.showMap' | transloco}}
+          <app-seazone-icon name="map" color="oceanic"></app-seazone-icon>
+        </button>
+      </div>
+      <div class="seaz-filters__badges_row_box">
+        <div *ngFor="let item of filterBadges$ | async" class="seaz-filters__badges_row">
+          <ng-container *ngIf="item?.displayValue$ | async as displayValue">
+            <ng-container *ngIf="displayValue?.length; else singleBadge">
+              <div *ngFor="let badge of displayValue;" class="seaz-filters__badges_item">
+                <span [innerHTML]="badge?.name"></span>
+              </div>
+            </ng-container>
+            <ng-template #singleBadge>
+              <div *ngIf="displayValue?.name" class="seaz-filters__badges_item">
+                <span [innerHTML]="displayValue?.name"></span>
+              </div>
+            </ng-template>
+          </ng-container>
+        </div>
+      </div>
+      <div class="seaz-search__result_text mobile">
+        <ng-container *ngIf=" (list$ | async)?.pagination as pagination">
+          {{'search.result' | transloco}}
+          {{pagination?.totalCount || 0}}/{{pagination?.commonCount || 0}}
+        </ng-container>
+      </div>
+      <app-crew-search-filter [directories]="filterDirectories$ | async" [data]="initialFilterForm"
+                              [pagination]="(list$ | async)?.pagination"
+                              (formChange)="onChangeFilter($event)"
+                              (filterBadgesChanges)="onFilterBadgesChanges($event)"
+                              class="seaz-filters">
+      </app-crew-search-filter>
+    </div>
+    <div class="seaz-search__content_box">
+      <div class="seaz-search__content">
+        <div class="seaz-search__card_list">
+          <app-crew-search-additional-form [data]="initialAdditionalFilterForm"
+                                           [directories]="additionalDirectories$ | async"
+                                           [inputForm]="initialInputFilter"
+                                           (formChange)="onChangeAdditionalFilter($event)"
+                                           (emailChanged)="onChangeEmailFilter($event)"
+                                           (userIdChanged)="onChangeUserIdFilter($event)"
+                                           (nearBoatSelected)="onNearBoatSelected($event)"
+                                           class="seaz-filters__cards">
+          </app-crew-search-additional-form>
+          <app-crew-search-list *appLoader="list$ | async as list" [data]="list" [type]="crewSearchType"
+                                [sentOfferId]="sentOfferId$ | async" (changePage)="onChangePage($event)"
+                                (toggleFavoriteStatus)="onToggleFavoriteStatus($event)"
+                                (toggleRelevantStatus)="onAddNotRelevant($event)"
+                                (toProfile)="onGoToProfile($event)" (sendJobOffer)="onSendJobOffer($event)"
+                                (resetFilters)="onResetFilters()"
+                                (showHistory)="onShowHistory($event)">
+          </app-crew-search-list>
+        </div>
+        <app-search-map *ngIf="showMap$ | async" appSticky class="seaz-map">
+        </app-search-map>
+      </div>
+    </div>
+  </div>
+</div>

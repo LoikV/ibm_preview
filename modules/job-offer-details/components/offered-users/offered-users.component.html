@@ -1,0 +1,23 @@
+<div class="seaz-offer__users_nav">
+  <div class="seaz-offer__users_nav--right">
+    <app-scrollable-navigation-links [items]="navItems$ | async" [exact]="false" [state]="{blockScroll: true}"
+      queryParamsHandling="null">
+    </app-scrollable-navigation-links>
+    <div class="seaz-filters__row_select">
+      <app-seazone-select [formControl]="sortControl" [placeholder]="'jobOffer.sort.lastAction' | transloco">
+        <app-seazone-select-option *ngFor="let item of sortList" [value]="item?.id">
+          {{item?.name | transloco}}
+        </app-seazone-select-option>
+      </app-seazone-select>
+    </div>
+  </div>
+  <div class="seaz-offer__users_nav_go">
+    <button (click)="openSharingOffers()" class="sharing__offers-btn">{{'jobOffer.share' | transloco}}</button>
+    <button *appPermission="'perm_search_crew_search'" (click)="onGoToSearch()" class="go__search">
+      <span>Go to search</span>
+      <app-seazone-icon class="go__search-icon" name="search" appSuffix color="white" strokedColor="white">
+      </app-seazone-icon>
+    </button>
+  </div>
+</div>
+<router-outlet></router-outlet>

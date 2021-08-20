@@ -1,0 +1,162 @@
+<div class="job-offer__card_wrapper" *transloco="let t; read: 'jobOffer'">
+  <div class="job-offer__card">
+    <div class="job-offer__card--left">
+      <div class="job-offer__card_name">
+        <div class="job-offer__card_head">
+          <div class="job-offer__card_head_wrapper">
+            <div class="job-offer__card_head_title seaz-h4">{{item?.position.name}}</div>
+            <img class="job-offer__card_head_position" [src]="item?.position.icon" alt="">
+          </div>
+          <div *ngIf="item?.hired" class="job-offer__card_head_status">{{t('hired')}}</div>
+        </div>
+        <p class="job-offer__card_head_offer seaz-text-medium">{{item?.view?.name}}</p>
+        <div *appPermission="'perm_search_job_offer_edit'" class="job-offer__card_publish">
+          <span class="job-offer__card_publish_label seaz-text-medium">publish</span>
+          <app-toggle-checkbox [withConfirm]="true" [value]="item?.published"
+                               (changed)="onTogglePublishStatus($event, item.hired, item.createdByCrewAgency)">
+          </app-toggle-checkbox>
+        </div>
+        <div class="job-offer__card_id">
+          <button appShare [params]="sharingParams" class="job-offer__card_share">
+            <app-seazone-icon class="job-offer__card_share_icon" name="arrowBackFill" color="white"></app-seazone-icon>
+          </button>
+          <span class="job-offer__card_id_title">{{t('jobOfferId')}}</span>
+          <div [appCopying]="item?.id" [succsessTitle]="t('actions.copyId')" class="job-offer__card_id_number_box">
+            <span class="job-offer__card_id_number">{{item?.id}}</span>
+            <app-seazone-icon name="copy" color="green" strokedColor="green" class="job-offer__card_id_number_icon">
+            </app-seazone-icon>
+          </div>
+        </div>
+      </div>
+      <div class="job-offer__card_info">
+        <div class="job-offer__card_info--top">
+          <div class="job-offer__card_info_col">
+            <span class="job-offer__card_info_label seaz-text-XSsmall">{{'offeredStatus.applied' | transloco}}</span>
+            <span class="job-offer__card_info_text seaz-h5">
+              {{item?.additional?.applied}}
+              <ng-container *ngIf="item?.additional?.appliedActions">
+                <span class="job-offer__card_info_actions">
+                  +{{item?.additional?.appliedActions}}
+                </span>
+              </ng-container>
+            </span>
+          </div>
+          <div class="job-offer__card_info_col">
+            <span class="job-offer__card_info_label seaz-text-XSsmall">{{'offeredStatus.sent' | transloco}}</span>
+            <span class="job-offer__card_info_text seaz-h5">
+              {{item?.additional?.sent}}
+              <ng-container *ngIf="item?.additional?.sentActions">
+                <span class="job-offer__card_info_actions">
+                  +{{item?.additional?.sentActions}}
+                </span>
+              </ng-container>
+            </span>
+
+          </div>
+          <!-- <div class="job-offer__card_info_col">
+            <span class="job-offer__card_info_label seaz-text-XSsmall">{{'offeredStatus.newMatching' |
+              transloco}}</span>
+            <span class="job-offer__card_info_text seaz-h5 new-match">2</span>
+          </div> -->
+        </div>
+        <div class="job-offer__card_info--bottom">
+          <div class="job-offer__card_info_col job-offer__card_info--contract">
+            <span class="job-offer__card_info_label seaz-text-XSsmall">{{t('contract')}}</span>
+            <span class="job-offer__card_info_text seaz-h5">
+              {{item?.jobOfferKindContract | arrayJoin: 'name'}}
+            </span>
+          </div>
+          <div class="job-offer__card_date_box">
+            <div class="job-offer__card_info_col">
+              <span class="job-offer__card_info_label seaz-text-XSsmall">{{'general.startDate' | transloco}}</span>
+              <ng-container *ngIf="item?.view?.flexible; else date">
+                <span class="job-offer__card_info_text seaz-h5">{{t('flexible')}}</span>
+              </ng-container>
+              <ng-template #date>
+                <span class="job-offer__card_info_text seaz-h5">{{item?.estimatedStartDate | date: 'dd/MM/yyyy'}}</span>
+              </ng-template>
+            </div>
+
+            <app-seazone-icon name="longArrow" stokedColor="violet"></app-seazone-icon>
+            <div class="job-offer__card_info_col">
+              <span class="job-offer__card_info_label seaz-text-XSsmall">{{'general.endDate' | transloco}}</span>
+              <span class="job-offer__card_info_text seaz-h5">
+                <ng-container *ngIf="item?.endDate; else noDate">
+                  {{item?.endDate | date: "dd/MM/yyyy"}}
+                </ng-container>
+                <ng-template #noDate>
+                  {{t('flexible')}}
+                </ng-template>
+              </span>
+            </div>
+          </div>
+          <div class="job-offer__card_info_col">
+            <ng-container *ngIf="!item?.negotiable else negotiable">
+              <span class="job-offer__card_info_label seaz-text-XSsmall">{{t('periodSalary', {
+                value:
+                item?.view?.salaryPeriod
+              })}}</span>
+              <div>
+                <span>
+                  <span class="job-offer__card_info_text seaz-h5">
+                    <span [innerHTML]="item?.offeredSalaryCurrency"></span>
+                    {{item?.offeredSalary}}
+                  </span>
+                </span>
+                <ng-container *ngIf="item?.offeredSalaryMax">
+                  <span>
+                    <span> - </span>
+                    <span class="job-offer__card_info_text seaz-h5">
+                      <span [innerHTML]="item?.offeredSalaryCurrency"></span>
+                      {{item?.offeredSalaryMax}}
+                    </span>
+                  </span>
+                </ng-container>
+
+              </div>
+
+            </ng-container>
+            <ng-template #negotiable>
+              <span class="job-offer__card_info_label seaz-text-XSsmall">{{t('salary')}}</span>
+              <span class="job-offer__card_info_text seaz-h5">
+                {{t('negotiable')}}
+              </span>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="job-offer__card_controls">
+      <button *appPermission="'perm_search_job_offer_edit'" (click)="onEdit()">
+        <app-seazone-icon name="pencil" color="violet" strokedColor="violet"></app-seazone-icon>
+      </button>
+    </div>
+    <div class="job-offer__card_btns">
+      <ng-container *appDisallowUserCrewAgency="true">
+        <ng-container *ngIf="!item?.createdByCrewAgency">
+          <button *appPermission="'perm_fin_add_new_users'" (click)="onInviteCrew(item?.id)" class="seaz__btn_primary"
+                  type="button">{{t('controls.inviteCrew')}}</button>
+        </ng-container>
+      </ng-container>
+      <button *appPermission="'perm_search_crew_search'" (click)="onGoToSearch()" class="seaz__btn_mulberry"
+              type="button">
+        {{t('controls.goToSearch')}}</button>
+      <button (click)="onGoToOffer()" class="seaz__btn_outlined" type="button">{{t('controls.goToOffer')}}</button>
+      <ng-container *appPermission="'perm_search_job_offer_edit'">
+        <button *ngIf="item?.published === PublishStatus.Published" (click)="onJumpToTop()" class="job-offer__card_jump"
+                type="button">
+          <app-seazone-icon name="arrowWide" [strokedColor]="'white'"></app-seazone-icon>
+          <span>
+            {{t('controls.jumpToTop')}}
+          </span>
+        </button>
+      </ng-container>
+      <span class="job-offer__card_update seaz-text-XSsmall">
+        {{t('lastUpdate', {value: item?.dateUpdate | date:'dd/MM/yyyy'})}}
+      </span>
+    </div>
+  </div>
+</div>
+<ng-template #spaceBlock>
+  <span class="seaz-offer__details_text">----</span>
+</ng-template>

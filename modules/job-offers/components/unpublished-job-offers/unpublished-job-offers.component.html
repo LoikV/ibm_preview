@@ -1,0 +1,18 @@
+<div class="job-offer">
+  <app-job-offers-list-header
+    (addJobOffer)="addJobOffer()"
+    (goToAddCrew)="navigateToAddCrew()"
+    (search)="onSearch($event)"
+    [initialSearch]="searchParam"
+  ></app-job-offers-list-header>
+  <ng-container *appLoader="offers$ | async as offer">
+    <app-job-offers-list (inviteCrew)="sendInvite($event)" (edit)="editOffer($event)"
+                         (toOffer)="onGoToOffer($event)" (goToSearch)="onGoToSearch($event)"
+                         (jumpToTop)="onJumpToTop($event)"
+                         (changePublishStatus)="changePublishStatus($event)" [jobOffers]="offer?.list">
+    </app-job-offers-list>
+    <app-paginator *ngIf="offer?.pagination?.pageCount > 1" [currentPage]="offer?.pagination?.currentPage"
+                   [totalSize]="offer?.pagination?.pageCount" (changePage)="onChangePage($event)">
+    </app-paginator>
+  </ng-container>
+</div>

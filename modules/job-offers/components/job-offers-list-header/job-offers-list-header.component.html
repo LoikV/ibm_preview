@@ -1,0 +1,17 @@
+<div class="job-offer__header" *transloco="let t; read: 'jobOffer'">
+  <div class="job-offer__header_input">
+    <app-seazone-input [formControl]="searchControl" [placeholder]="'general.search' | transloco">
+      <app-seazone-icon name="search" appSuffix strokedColor="white" color="white"></app-seazone-icon>
+    </app-seazone-input>
+  </div>
+  <div class="job-offer__header_btns">
+    <ng-container *appDisallowBoatCrewAgency="true">
+      <button *appPermission="'perm_search_add_crew'" type="button" class="seaz__btn_primary" (click)="onAddCrew()">
+        <app-seazone-icon name="addPerson"></app-seazone-icon>
+        <span>{{t('controls.addCrew')}}</span>
+      </button>
+    </ng-container>
+    <button *appPermission="'perm_search_job_offer_create'" (click)="onAddJobOffer()" class="seaz__btn_primary"
+            type="button">{{t('controls.addJobOffer')}}</button>
+  </div>
+</div>

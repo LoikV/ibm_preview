@@ -1,0 +1,31 @@
+<ng-container *appLoader="profile$ | async as cv">
+  <div class="seaz-crew__cv-preview">
+    <div class="seaz-yaht__head seaz-cv__crew_head">
+      <button class="seaz__return_btn" (click)="backClickHandler()">
+        <app-seazone-icon name="shevron" strokedColor="dark"></app-seazone-icon>
+      </button>
+      <h2 class="seaz-h2">
+        <span>
+          {{'pages.crew.title' | transloco}}
+        </span>
+        <span class="seaz-cv__crew_dot"></span>
+        <span class="seaz-cv__crew_head_name">{{cv?.user?.fullName}}</span>
+      </h2>
+    </div>
+    <app-crew-cv [cv]="cv" [fromOffer]="true"
+                 [canDownloadFile]="cv?.invStatus && cv?.invStatus === JobOfferInvitationStatusType.INV_STATUS_APPLIED ||
+  cv?.invStatus === JobOfferInvitationStatusType.INV_STATUS_VIEWED ||
+  cv?.invStatus === JobOfferInvitationStatusType.INV_STATUS_SENT_ADD_AS_CREW ||
+  cv?.invStatus === JobOfferInvitationStatusType.INV_STATUS_ACCEPTED ||
+  cv?.invStatus === JobOfferInvitationStatusType.INV_STATUS_OPENED_CONTACTS ||
+  cv?.invStatus === JobOfferInvitationStatusType.INV_STATUS_VIEWED_CONTACTS"
+                 [jobOfferInvitationId]="jobOfferInvitationId"
+                 (sendOffer)="onSendOffer()"
+                 (sendOfferAgain)="onSendOfferAgain(cv?.offerAction?.canSendOfferAgain)"
+                 (notRelevant)="onAddNotRelevant()"
+                 (addAsCrew)="onAddAsCrew()"
+                 (decline)="onDecline($event)"
+                 (toggleFavoriteStatus)="onToggleFavoriteStatus($event)"
+                 class="seaz-crew__cv_search"></app-crew-cv>
+  </div>
+</ng-container>

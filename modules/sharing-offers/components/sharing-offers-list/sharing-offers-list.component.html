@@ -1,0 +1,49 @@
+<ng-container *ngIf="data">
+  <ng-container *ngFor="let item of data.list">
+    <header class="seaz-search__card_head">
+      <div class="seaz-search__card_head_info">
+        <div class="seaz-search__card_head_badges">
+          <div
+            *ngIf="type === sharingCandidatesSourceType.Favorite"
+            class="seaz-search__card_head_status">
+            <app-looking-job-status [status]="item?.lookingJobStatus?.id"></app-looking-job-status>
+            <div class="seaz-search__card_head_updates seaz-text-small">
+              <span>
+                {{ 'crew.profile.updated' | transloco}}
+              </span>
+              <span>
+                {{item?.dateUpdateStatus}}
+              </span>
+            </div>
+          </div>
+          <div *ngIf="type === sharingCandidatesSourceType.JobOffer"
+               class="seaz-search__card_head_updates_status">
+            <app-offered-status [status]="item?.status">
+            </app-offered-status>
+
+          <div *ngIf="item?.dateUpdateStatus" class="seaz-search__card_head_updates seaz-text-small">
+              <span>
+                {{item?.dateUpdateStatus | daysAgo: ("general.lastActions" | transloco)}}
+              </span>
+          </div>
+        </div>
+        </div>
+      </div>
+      <div class="header__controls seaz-search__card_controls">
+        <ng-container *ngIf="type === sharingCandidatesSourceType.JobOffer">
+          <app-seazone-checkbox [value]="item?.selected" (changed)="selectUser($event, item.jobOfferInvitationId)" class="seaz-modal__share_offer_checkbox">
+          </app-seazone-checkbox>
+        </ng-container>
+        <ng-container *ngIf="type === sharingCandidatesSourceType.Favorite">
+          <app-seazone-checkbox [value]="item?.selected" (changed)="selectUser($event, item?.id)" class="seaz-modal__share_offer_checkbox">
+          </app-seazone-checkbox>
+        </ng-container>
+
+      </div>
+    </header>
+    <app-sharing-job-offer-actions-card [item]="item">
+    </app-sharing-job-offer-actions-card>
+  </ng-container>
+
+</ng-container>
+
